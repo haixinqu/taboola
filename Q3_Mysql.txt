@@ -1,0 +1,36 @@
+CREATE TABLE `product` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(50) NOT NULL,
+  `category` VARCHAR(20) NOT NULL,
+  `create_date` DATETIME NOT NULL,
+  `create_author` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `product_price` (
+  `id` INT(11) NOT NULL,
+  `pid` INT(11) NOT NULL,
+  `price` DOUBLE NOT NULL,
+  `discount_percent` DOUBLE NOT NULL DEFAULT '0',
+  `update_time` DATETIME NOT NULL,
+  `update_author` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `pid` (`pid`),
+  CONSTRAINT `product_price_ibfk_1` FOREIGN KEY (`pid`) REFERENCES `product` (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+CREATE TABLE `product_price_change_log` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `pid` INT(11) NOT NULL,
+  `old_price` DOUBLE NOT NULL,
+  `new_peice` DOUBLE NOT NULL,
+  `create_time` DATETIME NOT NULL,
+  `create_author` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `pid` (`pid`),
+  CONSTRAINT `product_price_change_log_ibfk_1` FOREIGN KEY (`pid`) REFERENCES `product` (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+
+INSERT  INTO `product_price`(`id`,`pid`,`price`,`discount_percent`,`update_time`,`update_author`) VALUES (1,1,123,0.35,'2022-11-30 05:49:04','Admin1'),(2,2,2324,0.89,'2022-11-30 05:49:13','Admin1');
+
+SELECT NAME, category, price, update_time, update_author FROM product, product_price WHERE product.`id` = product_price.pid
